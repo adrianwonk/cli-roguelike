@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include <stdio.h>
+#include <ncurses.h>
 using namespace std;
 
 int Entity::getHP() const{
@@ -7,10 +8,10 @@ int Entity::getHP() const{
 }
 
 void Entity::printEntity() {
-	printf("--Entity--------\n"
+	printw("--Entity--------\n"
 			"Name: %s\n"
 			"Health: %d\n"
-			"Abilities: %s\n"
+			"Abilities: %s\n\n"
 			, name.c_str(), health, "nothing");
 }
 

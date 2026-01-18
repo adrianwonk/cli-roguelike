@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 using namespace std;
+
 class Entity
 {
 public:
@@ -18,6 +19,7 @@ public:
 	void heal(int);
 	virtual void printEntity();
 	int getDmg();
+  string getName () { return name; }
 
 private:
 	// basic values for a single entity.
