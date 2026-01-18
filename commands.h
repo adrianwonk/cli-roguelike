@@ -89,7 +89,7 @@ public:
     return from.getName() + " just attacked " + to.getName() + "!";
   }
   void sideEffects(){
-    from.attack(to, from.getDmg());
+    from.attack(to, from.stats.getDMG());
   }
   string getIdentifier(){
     return "attack " + to.getName();

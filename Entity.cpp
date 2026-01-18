@@ -3,26 +3,32 @@
 #include <ncurses.h>
 using namespace std;
 
-int Entity::getHP() const{
-	return health;
-}
-
 void Entity::printEntity() {
 	printw("--Entity--------\n"
 			"Name: %s\n"
 			"Health: %d\n"
 			"Abilities: %s\n\n"
-			, name.c_str(), health, "nothing");
-}
-
-void Entity::heal(int amt) {
-	health += amt;
+			, name.c_str(), stats.getHP(), "nothing");
 }
 
 void Entity::attack(Entity& other, int amt) {
-	other.health -= amt;
+	other.stats.changeHP(-amt);
 }
 
-int Entity::getDmg() {
-	return dmg;
+int statVector::getHP() const{
+  return statsv[0];
+}
+
+int statVector::changeHP(int change){
+  statsv[0] += change;
+  return statsv[0];
+}
+
+int statVector::getDMG() const{
+  return statsv[1];
+}
+
+int statVector::changeDMG(int change) {
+  statsv[1] += change;
+  return statsv[1];
 }

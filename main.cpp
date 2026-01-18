@@ -6,20 +6,21 @@
 #include <memory>
 #include <cmath>
 #include <ncurses.h>
-#include <signal.h>
+#include "Item.h"
 
-// text based D-Crawler??
 using namespace std;
 
 void takeUserInput(vector<unique_ptr<Command>>& actionList, int startIndex, int& pageNum);
 void print8ActionList(vector<unique_ptr<Command>>& actionList, int startIndex, int pageNum, int totalPageNum);
 int getTotalPageNum(vector<unique_ptr<Command>>& list);
+void printPlayer(Entity& player);
 
 int main(){
   // ncurses window setup.
   initscr(); // allocates memory for the screen.
   cbreak();     // disables buffering of input, but retains control signals.
   noecho();
+  ///////////////////////////
   // store available actions this turn
   int level { 1 };
   string outputBuff;
@@ -29,11 +30,12 @@ int main(){
   actionList.push_back(make_unique<printCommand>("don't be a dickhead", outputBuff));
   actionList.push_back(make_unique<createCommand>(actionList, outputBuff));
   actionList.push_back(make_unique<advanceLevel>(level, outputBuff));
+  /////////////////////////////////
   int pageNum { 0 }; // each page shows 8 items.
 
 	Entity player("player", 5);
 	int input { 0 };
-  
+
 
 	while (1){
     // Guards to avoid values going out of range.
@@ -52,17 +54,25 @@ int main(){
     }
     ///////////////////////////// end guards
 
-    // display current environment
+    // display current UI
     clear();
-    player.printEntity();
+    printPlayer(player);
     printw("Output:\n%s\n\n", outputBuff.c_str());
     print8ActionList(actionList, startIndex, pageNum, getTotalPageNum(actionList));
-    refresh();
+    refresh(); // make sure the user can see the updated UI
+    //////////////////////////// end display UI
 
     // take user reaction and execute commands
-    takeUserInput(actionList, startIndex, pageNum);
+    takeUserInput(actionList, startIndex, pageNum); // should be multithreaded to avoid blocking loop with commands.
 	}
   endwin();
+}
+
+void printPlayer(Entity& player){
+  printw("Player info -----------\n");
+  printw("Health: %d\n", player.stats.getHP());
+  printw("Attack DMG: %d\n", player.stats.getDMG());
+  printw("----------------------\n");
 }
 
 void takeUserInput(vector<unique_ptr<Command>>& actionList, int startIndex, int& pageNum){
